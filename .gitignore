@@ -2,3 +2,4 @@ test.h
 build/
 .vscode/
 bin/main
+bin/log.txt
