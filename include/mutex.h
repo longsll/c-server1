@@ -15,6 +15,7 @@
 //std::thread, pthread
 namespace sylar {
 
+//信号量
 class Semaphore {
 public:
     Semaphore(uint32_t count = 0);
@@ -43,7 +44,7 @@ private:
     pthread_cond_t m_cond;
 };
 
-
+//局部锁
 template<class T>
 struct ScopedLockImpl {
 public:
@@ -75,6 +76,7 @@ private:
     bool m_locked;
 };
 
+//局部读锁
 template<class T>
 struct ReadScopedLockImpl {
 public:
@@ -106,6 +108,7 @@ private:
     bool m_locked;
 };
 
+//局部写锁
 template<class T>
 struct WriteScopedLockImpl {
 public:
@@ -137,6 +140,7 @@ private:
     bool m_locked;
 };
 
+//互斥锁
 class Mutex {
 public:
     typedef ScopedLockImpl<Mutex> Lock;
@@ -169,6 +173,7 @@ public:
     void unlock() {}
 };
 
+//读写锁
 class RWMutex {
 public:
     typedef ReadScopedLockImpl<RWMutex> ReadLock;
@@ -210,6 +215,7 @@ public:
     void unlock() {}
 };
 
+//自旋锁
 class Spinlock {
 public:
     typedef ScopedLockImpl<Spinlock> Lock;
@@ -232,6 +238,7 @@ private:
     pthread_spinlock_t m_mutex;
 };
 
+//原子锁
 class CASLock {
 public:
     typedef ScopedLockImpl<CASLock> Lock;

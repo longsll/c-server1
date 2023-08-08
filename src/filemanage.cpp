@@ -10,7 +10,7 @@
 #include <fstream>
 #include <signal.h>
 namespace sylar{
-    /**
+    /**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
  * @brief: 获取文件夹下的所有文件
  * @param files: 装载文件夹下的所有文件
  * @param path: 文件夹路径
@@ -20,6 +20,7 @@ void FSUtil::ListAllFile(std::vector<std::string>& files
                             , const std::string& path
                             , const std::string& subfix) {
     /** 判断该文件夹是否存在 */
+    //c_str() 函数可以将 const string* 类型 转化为 const char* 类型
     if(access(path.c_str(), 0) != 0)
         return;
     /** 打开文件夹 */
@@ -32,8 +33,7 @@ void FSUtil::ListAllFile(std::vector<std::string>& files
     while ((dp = readdir(dir)) != nullptr) {
         /* 若该文件为文件夹 */
         if(dp->d_type == DT_DIR) {
-            if(!strcmp(dp->d_name, "..")
-                || !strcmp(dp->d_name, "."))
+            if(!strcmp(dp->d_name, "..")|| !strcmp(dp->d_name, "."))
                 continue;       // 若该文件为该两者，则直接跳过
             ListAllFile(files, path + "/" + dp->d_name, subfix);    // 递归执行
         /* 若为常规文件 */
@@ -81,8 +81,8 @@ bool FSUtil::Mkdir(const std::string& dirname) {
     if(__lstat(dirname.c_str()) == 0) {
         return true;
     }
-    char* path = strdup(dirname.c_str());   // 获取一个新串副本
-    char* ptr = strchr(path + 1, '/');  // 获取第一个出现/字符的位置
+    char* path = strdup(dirname.c_str());   // 获取一个新串副本 strdup()函数主要是拷贝字符串s的一个副本，由函数返回值返回
+    char* ptr = strchr(path + 1, '/');  // 获取第一个出现/字符的位置 参数 str 所指向的字符串中搜索第一次出现字符 c
     /* 对文件路径进行切割，若出现多级目录，则创建多级目录 */
     do {
         for(; ptr; *ptr = '/', ptr = strchr(ptr + 1, '/')) {
@@ -167,8 +167,7 @@ bool FSUtil::Rm(const std::string& path) {
     bool ret = true;
     struct dirent* dp = nullptr;
     while((dp = readdir(dir))) {
-        if(!strcmp(dp->d_name, ".")
-           || !strcmp(dp->d_name, "..")) {
+        if(!strcmp(dp->d_name, ".")|| !strcmp(dp->d_name, "..")) {
             continue;
         }
         std::string dirname = path + "/" + dp->d_name;
@@ -205,8 +204,7 @@ bool FSUtil::Realpath(const std::string& path, std::string& rpath) {
 }
 
 
-bool FSUtil::OpenForRead(std::ifstream& ifs, const std::string& filename
-                        , std::ios_base::openmode mode) {
+bool FSUtil::OpenForRead(std::ifstream& ifs, const std::string& filename, std::ios_base::openmode mode) {
     ifs.open(filename.c_str(), mode);
 
     return ifs.is_open();

@@ -7,7 +7,7 @@ using namespace sylar;
 
 
 int main(int argc, char** argv) {     
-    test_pool();
+    sylar::test_filemanage();
     return 0;
 }
 
