@@ -7,6 +7,7 @@
 
 namespace sylar{
        void test_log () {
+
         // 创建一个日志器
         sylar::Logger::ptr logger(new sylar::Logger);
         // 输出到控制台
@@ -24,7 +25,10 @@ namespace sylar{
         SYLAR_LOG_FMT_ERROR(logger, "test macro fmt error %s", "aa");
 
         // 创建新的日志器，并输出日志
-        auto l = sylar::LoggerMgr::GetInstance()->getLogger("xx");
+        auto l = sylar::LoggerMgr::GetInstance()->getLogger("root");
         SYLAR_LOG_INFO(l) << "xxx";
+        auto ll = sylar::LoggerMgr::GetInstance() ->getRoot();
+        SYLAR_LOG_INFO(ll);
+        sylar::LoggerMgr::GetInstance()->showlog();
     }
 }

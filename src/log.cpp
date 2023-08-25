@@ -9,11 +9,11 @@ namespace sylar {
 
 
 const char* LogLevel::ToString(LogLevel::Level level) {
-    switch(level) {
+       switch(level) {
 #define XX(name) \
     case LogLevel::name: \
-        return #name; \
-        break;
+        return #name;\
+        break; 
 
     XX(DEBUG);
     XX(INFO);
@@ -27,6 +27,27 @@ const char* LogLevel::ToString(LogLevel::Level level) {
     return "UNKNOW";
 }
 
+LogLevel::Level LogLevel::FromString(const std::string& str) {
+#define XX(level, v) \
+    if(str == #v) { \
+        return LogLevel::level; \
+    }
+    XX(DEBUG, debug);
+    XX(INFO, info);
+    XX(WARN, warn);
+    XX(ERROR, error);
+    XX(FATAL, fatal);
+
+    XX(DEBUG, DEBUG);
+    XX(INFO, INFO);
+    XX(WARN, WARN);
+    XX(ERROR, ERROR);
+    XX(FATAL, FATAL);
+    return LogLevel::UNKNOW;
+#undef XX
+}
+
+
 LogEventWrap::LogEventWrap(LogEvent::ptr e)
     :m_event(e) {
 }
@@ -36,12 +57,13 @@ LogEventWrap::~LogEventWrap() {
 }
 
 void LogEvent::format(const char* fmt, ...) {
-    va_list al;
+    va_list al; //val_list 用于获取不确定个数的参数
     va_start(al, fmt);
     format(fmt, al);
     va_end(al);
 }
 
+/** 将内容都添加到m_ss中 */
 void LogEvent::format(const char* fmt, va_list al) {
     char* buf = nullptr;
     int len = vasprintf(&buf, fmt, al);
@@ -184,9 +206,7 @@ LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
     ,m_level(level) {
 }
 
-Logger::Logger(const std::string& name)
-    :m_name(name)
-    ,m_level(LogLevel::DEBUG) {
+Logger::Logger(const std::string& name):m_name(name),m_level(LogLevel::DEBUG) {
     m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
 }
 
@@ -198,8 +218,7 @@ void Logger::addAppender(LogAppender::ptr appender) {
 }
 
 void Logger::delAppender(LogAppender::ptr appender) {
-    for(auto it = m_appenders.begin();
-            it != m_appenders.end(); ++it) {
+    for(auto it = m_appenders.begin();it != m_appenders.end(); ++it) {
         if(*it == appender) {
             m_appenders.erase(it);
             break;
@@ -390,6 +409,17 @@ LoggerManager::LoggerManager() {
 Logger::ptr LoggerManager::getLogger(const std::string& name) {
     auto it = m_loggers.find(name);
     return it == m_loggers.end() ? m_root : it->second;
+}
+
+void LoggerManager::showlog(){
+    std :: cout << "showlogs";
+    std :: cout << sizeof(m_loggers) << std :: endl;
+    for(auto t : m_loggers){
+        std::cout << t.first << std :: endl;
+    }
+}
+
+void LoggerManager::init() {
 }
 
 }

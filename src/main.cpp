@@ -13,7 +13,7 @@ using namespace sylar;
  
 int main(int argc,char** argv)
 {
-    test_yaml();
+    
     return 0;
 }
 
